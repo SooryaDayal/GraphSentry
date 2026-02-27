@@ -1,1 +1,1 @@
-# SentinelGraph
+# GraphSentry
