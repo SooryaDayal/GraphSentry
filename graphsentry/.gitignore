@@ -1,4 +1,5 @@
 __pycache__/
 .venv/
 *.pyc
-graphsentry/data/amlsim/
+data/amlsim/
+data/amlsim/*.csv
