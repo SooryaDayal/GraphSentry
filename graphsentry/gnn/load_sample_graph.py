@@ -42,7 +42,33 @@ def main():
     for etype in data.edge_types:
         if hasattr(data[etype], "edge_attr"):
             print(f"{etype}: {data[etype].edge_attr.shape}")
+    
+        print("\n--- Fraud Pattern Check: Shared Devices ---")
 
+    edge_type = ('account', 'uses_device', 'device')
+
+    if edge_type in data.edge_types:
+
+        edge_index = data[edge_type].edge_index
+
+        account_indices = edge_index[0].tolist()
+        device_indices = edge_index[1].tolist()
+
+        device_to_accounts = {}
+
+        for acc, dev in zip(account_indices, device_indices):
+            device_to_accounts.setdefault(dev, []).append(acc)
+
+        suspicious = {d: a for d, a in device_to_accounts.items() if len(a) > 1}
+
+        if suspicious:
+            print("Devices used by multiple accounts (possible mule hubs):\n")
+
+            for dev, accounts in list(suspicious.items())[:5]:
+                print(f"Device {dev} used by accounts:", accounts)
+
+        else:
+            print("No suspicious shared devices found.")
 
 if __name__ == "__main__":
     main()
