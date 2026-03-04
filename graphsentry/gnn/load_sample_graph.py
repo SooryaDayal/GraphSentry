@@ -5,10 +5,10 @@ from build_graph import build_heterogeneous_graph
 
 def main():
 
-    # locate the repo root
+    # locate repo root
     repo_root = Path(__file__).resolve().parents[2]
 
-    # Member 2's generated Nexus graph
+    # path to Member 2's generated graph
     graph_path = repo_root / "graphsentry" / "data" / "nexus_graph_output.json"
 
     print("Loading Nexus graph from:", graph_path)
@@ -19,7 +19,7 @@ def main():
     nodes = graph["nodes"]
     edges = graph["edges"]
 
-    # Build PyTorch Geometric graph
+    # build PyTorch Geometric graph
     data = build_heterogeneous_graph(nodes, edges)
 
     print("\nGraph successfully converted to PyG HeteroData!\n")
@@ -32,11 +32,16 @@ def main():
 
     print("\nNode feature shapes:")
     for ntype in data.node_types:
-        print(f"{ntype}:", data[ntype].x.shape)
+        print(f"{ntype}: {data[ntype].x.shape}")
 
     print("\nEdge index shapes:")
     for etype in data.edge_types:
-        print(f"{etype}:", data[etype].edge_index.shape)
+        print(f"{etype}: {data[etype].edge_index.shape}")
+
+    print("\nEdge attribute shapes:")
+    for etype in data.edge_types:
+        if hasattr(data[etype], "edge_attr"):
+            print(f"{etype}: {data[etype].edge_attr.shape}")
 
 
 if __name__ == "__main__":
