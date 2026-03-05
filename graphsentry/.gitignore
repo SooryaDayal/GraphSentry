@@ -1,5 +1,1 @@
 __pycache__/
-*.csv
-*.log
-.venv/
-.env
